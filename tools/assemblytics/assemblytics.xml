@@ -1,0 +1,187 @@
+<tool id="assemblytics" name="Assemblytics" version="@TOOL_VERSION@+galaxy@VERSION_SUFFIX@" license="MIT" profile="20.01">
+    <description>Analyze your assembly by comparing it to a reference genome</description>
+
+    <macros>
+        <token name="@TOOL_VERSION@">1.2.1</token>
+        <token name="@VERSION_SUFFIX@">0</token>
+    </macros>
+
+    <edam_topics>
+        <edam_topic>topic_0196</edam_topic>
+        <edam_topic>topic_3673</edam_topic>
+        <edam_topic>topic_0102</edam_topic>
+    </edam_topics>
+    <edam_operations>
+        <edam_operation>operation_0310</edam_operation>
+        <edam_operation>operation_0525</edam_operation>
+        <edam_operation>operation_3227</edam_operation>
+        <edam_operation>operation_3216</edam_operation>
+    </edam_operations>
+    <xrefs>
+        <xref type="bio.tools">Assemblytics</xref>
+    </xrefs>
+
+    <requirements>
+        <requirement type="package" version="@TOOL_VERSION@">assemblytics</requirement>
+    </requirements>
+
+    <!-- Note always run the cat output/progress.log to catch errors-->
+    <command detect_errors="exit_code"><![CDATA[
+      Assemblytics $delta output $uniquelength $minsize $maxsize &&
+      mv output.Assemblytics.unique_length_filtered_l*.delta.gz output.Assemblytics.unique_length_filtered.delta.gz;
+      cat output/progress.log
+    ]]></command>
+
+    <inputs>
+        <param name="delta" type="data" format="tabular" label="Match file from Nucmer" />
+        <param name="uniquelength" type="integer" value="10000" min="0" label="Unique sequence length required" help="The unique sequence length required represents an anchor for determining if a sequence is unique enough to safely call variants from, which is an alternative to the mapping quality filter for read alignment." />
+        <param name="minsize" type="integer" value="50"    min="0" label="Minimum variant size" help="Minimum variant size to report" />
+        <param name="maxsize" type="integer" value="10000" min="0" label="Maximum variant size" help="Maximum variant size to report" />
+    </inputs>
+
+    <outputs>
+        <data format="txt" name="output_Assemblytics_assembly_stats_txt" from_work_dir="output.Assemblytics_assembly_stats.txt" label="${tool.name} on ${on_string}: output.Assemblytics_assembly_stats.txt" />
+        <!-- <data format="zip" name="output_Assemblytics_results_zip" from_work_dir="output.Assemblytics_results.zip" label="${tool.name} on ${on_string}: output.Assemblytics_results.zip" /> -->
+        <data format="bed" name="output_Assemblytics_structural_variants_bed" from_work_dir="output.Assemblytics_structural_variants.bed" label="${tool.name} on ${on_string}: output.Assemblytics_structural_variants.bed" />
+        <data format="txt" name="output_Assemblytics_structural_variants_summary" from_work_dir="output.Assemblytics_structural_variants.summary" label="${tool.name} on ${on_string}: output.Assemblytics_structural_variants.summary" />
+        <data format="csv" name="output_Assemblytics_structural_variants_summary_csv" from_work_dir="output.Assemblytics_structural_variants.summary.csv" label="${tool.name} on ${on_string}: output.Assemblytics_structural_variants.summary.csv" />
+        <data format="png" name="output_Assemblytics_Dotplot_filtered_png" from_work_dir="output.Assemblytics.Dotplot_filtered.png" label="${tool.name} on ${on_string}: output.Assemblytics.Dotplot_filtered.png" />
+        <data format="pdf" name="output_Assemblytics_Nchart_pdf" from_work_dir="output.Assemblytics.Nchart.pdf" label="${tool.name} on ${on_string}: output.Assemblytics.Nchart.pdf" />
+        <data format="png" name="output_Assemblytics_Nchart_png" from_work_dir="output.Assemblytics.Nchart.png" label="${tool.name} on ${on_string}: output.Assemblytics.Nchart.png" />
+        <data format="pdf" name="output_Assemblytics_size_distributions_all_variants_50_500_pdf" from_work_dir="output.Assemblytics.size_distributions.all_variants.50-500.pdf" label="${tool.name} on ${on_string}: output.Assemblytics.size_distributions.all_variants.50-500.pdf" />
+        <data format="png" name="output_Assemblytics_size_distributions_all_variants_50_500_png" from_work_dir="output.Assemblytics.size_distributions.all_variants.50-500.png" label="${tool.name} on ${on_string}: output.Assemblytics.size_distributions.all_variants.50-500.png" />
+        <data format="pdf" name="output_Assemblytics_size_distributions_all_variants_500_10000_pdf" from_work_dir="output.Assemblytics.size_distributions.all_variants.500-10000.pdf" label="${tool.name} on ${on_string}: output.Assemblytics.size_distributions.all_variants.500-10000.pdf" />
+        <data format="png" name="output_Assemblytics_size_distributions_all_variants_500_10000_png" from_work_dir="output.Assemblytics.size_distributions.all_variants.500-10000.png" label="${tool.name} on ${on_string}: output.Assemblytics.size_distributions.all_variants.500-10000.png" />
+        <data format="pdf" name="output_Assemblytics_size_distributions_all_variants_log_all_sizes_pdf" from_work_dir="output.Assemblytics.size_distributions.all_variants.log_all_sizes.pdf" label="${tool.name} on ${on_string}: output.Assemblytics.size_distributions.all_variants.log_all_sizes.pdf" />
+        <data format="png" name="output_Assemblytics_size_distributions_all_variants_log_all_sizes_png" from_work_dir="output.Assemblytics.size_distributions.all_variants.log_all_sizes.png" label="${tool.name} on ${on_string}: output.Assemblytics.size_distributions.all_variants.log_all_sizes.png" />
+        <data format="gz" name="output_Assemblytics_unique_length_filtered_delta_gz" from_work_dir="output.Assemblytics.unique_length_filtered.delta.gz" label="${tool.name} on ${on_string}: output.Assemblytics.unique_length_filtered_l10000.delta.gz" />
+        <data format="csv" name="output_coords_csv" from_work_dir="output.coords.csv" label="${tool.name} on ${on_string}: output.coords.csv" />
+        <data format="txt" name="output_coords_query_genome" from_work_dir="output.coords.query.genome" label="${tool.name} on ${on_string}: output.coords.query.genome" />
+        <data format="txt" name="output_coords_ref_genome" from_work_dir="output.coords.ref.genome" label="${tool.name} on ${on_string}: output.coords.ref.genome" />
+        <data format="txt" name="output_coords_tab" from_work_dir="output.coords.tab" label="${tool.name} on ${on_string}: output.coords.tab" />
+        <data format="csv" name="output_info_csv" from_work_dir="output.info.csv" label="${tool.name} on ${on_string}: output.info.csv" />
+        <data format="csv" name="output_oriented_coords_csv" from_work_dir="output.oriented_coords.csv" label="${tool.name} on ${on_string}: output.oriented_coords.csv" />
+        <data format="bed" name="output_variants_between_alignments_bed" from_work_dir="output.variants_between_alignments.bed" label="${tool.name} on ${on_string}: output.variants_between_alignments.bed" />
+        <data format="bed" name="output_variants_within_alignments_bed" from_work_dir="output.variants_within_alignments.bed" label="${tool.name} on ${on_string}: output.variants_within_alignments.bed" />
+    </outputs>
+
+    <tests>
+        <!-- core outputs -->
+        <test>
+            <param name="delta" value="sample.delta" />
+            <output name="output_Assemblytics_assembly_stats_txt" file="output.Assemblytics_assembly_stats.txt" ftype="txt" />
+            <output name="output_Assemblytics_structural_variants_bed" file="output.Assemblytics_structural_variants.bed" ftype="bed" />
+            <output name="output_Assemblytics_structural_variants_summary" file="output.Assemblytics_structural_variants.summary" ftype="txt" />
+            <output name="output_Assemblytics_structural_variants_summary_csv" file="output.Assemblytics_structural_variants.summary.csv" ftype="csv" />
+            <output name="output_coords_csv" file="output.coords.csv" ftype="csv" />
+            <output name="output_coords_query_genome" file="output.coords.query.genome" ftype="txt" />
+            <output name="output_coords_ref_genome" file="output.coords.ref.genome" ftype="txt" />
+            <output name="output_coords_tab" file="output.coords.tab" ftype="txt" />
+            <output name="output_info_csv" file="output.info.csv" ftype="csv" />
+            <output name="output_oriented_coords_csv" file="output.oriented_coords.csv" ftype="csv" />
+            <output name="output_variants_between_alignments_bed" file="output.variants_between_alignments.bed" ftype="bed" />
+            <output name="output_variants_within_alignments_bed" file="output.variants_within_alignments.bed" ftype="bed" />
+            <output name="output_Assemblytics_unique_length_filtered_delta_gz" file="output.Assemblytics.unique_length_filtered.delta.gz" ftype="gz" compare="diff" decompress="true"/>
+        </test>       
+
+        <!-- core + png + pdf -->
+        <test>
+            <param name="delta" value="sample.delta" />
+
+            <output name="output_Assemblytics_assembly_stats_txt" file="output.Assemblytics_assembly_stats.txt" ftype="txt" />
+            <output name="output_Assemblytics_structural_variants_bed" file="output.Assemblytics_structural_variants.bed" ftype="bed" />
+            <output name="output_Assemblytics_structural_variants_summary" file="output.Assemblytics_structural_variants.summary" ftype="txt" />
+            <output name="output_Assemblytics_structural_variants_summary_csv" file="output.Assemblytics_structural_variants.summary.csv" ftype="csv" />
+            <output name="output_Assemblytics_unique_length_filtered_delta_gz" file="output.Assemblytics.unique_length_filtered.delta.gz" ftype="gz" compare="diff" decompress="true"/>
+            <output name="output_coords_csv" file="output.coords.csv" ftype="csv" />
+            <output name="output_coords_query_genome" file="output.coords.query.genome" ftype="txt" />
+            <output name="output_coords_ref_genome" file="output.coords.ref.genome" ftype="txt" />
+            <output name="output_coords_tab" file="output.coords.tab" ftype="txt" />
+            <output name="output_info_csv" file="output.info.csv" ftype="csv" />
+            <output name="output_oriented_coords_csv" file="output.oriented_coords.csv" ftype="csv" />
+            <output name="output_variants_between_alignments_bed" file="output.variants_between_alignments.bed" ftype="bed" />
+            <output name="output_variants_within_alignments_bed" file="output.variants_within_alignments.bed" ftype="bed" />
+
+            <output name="output_Assemblytics_Dotplot_filtered_png" file="output.Assemblytics.Dotplot_filtered.png" ftype="png" />
+            <output name="output_Assemblytics_Nchart_png" file="output.Assemblytics.Nchart.png" ftype="png" />
+            <output name="output_Assemblytics_size_distributions_all_variants_50_500_png" file="output.Assemblytics.size_distributions.all_variants.50-500.png" ftype="png" />
+            <output name="output_Assemblytics_size_distributions_all_variants_500_10000_png" file="output.Assemblytics.size_distributions.all_variants.500-10000.png" ftype="png" />
+            <output name="output_Assemblytics_size_distributions_all_variants_log_all_sizes_png" file="output.Assemblytics.size_distributions.all_variants.log_all_sizes.png" ftype="png" />
+
+            <output name="output_Assemblytics_Nchart_pdf" file="output.Assemblytics.Nchart.pdf" ftype="pdf" />
+            <output name="output_Assemblytics_size_distributions_all_variants_50_500_pdf" file="output.Assemblytics.size_distributions.all_variants.50-500.pdf" ftype="pdf" />
+            <output name="output_Assemblytics_size_distributions_all_variants_500_10000_pdf" file="output.Assemblytics.size_distributions.all_variants.500-10000.pdf" ftype="pdf" />
+            <output name="output_Assemblytics_size_distributions_all_variants_log_all_sizes_pdf" file="output.Assemblytics.size_distributions.all_variants.log_all_sizes.pdf" ftype="pdf" />
+        </test>
+    </tests>
+
+    <help><![CDATA[
+**Assemblytics** is an application for detecting and analyzing variants from a de novo genome
+assembly aligned to a reference genome. It incorporates a unique anchor filtering approach to
+increase robustness to repetitive elements, and identifies six classes of variants based on their
+distinct alignment signatures. Assemblytics can be applied both to comparing aberrant genomes,
+such as human cancers, to a reference, or to identify differences between related species.
+Multiple visualizations enable in-depth explorations of the genomic distributions of variants.
+
+To run, first align your assembly to a reference genome using **Nucmer** (part of the MUMmer
+package, available in Galaxy). Make sure to select the **delta** output format. You can then
+use the resulting delta file as input to Assemblytics.
+
+**Parameters**
+
+- ``Unique sequence length required``: An anchor for determining whether a sequence is unique
+  enough to safely call variants from — an alternative to the mapping quality filter used in
+  read alignment. The default of 10,000 means a variant must be anchored by at least 10,000 bp
+  of unique sequence. This is a stringent filter; reduce it for more fragmented assemblies or
+  more repetitive genomes.
+
+- ``Minimum variant size``: Minimum variant size to report. Defaults to 50 bp; variants smaller
+  than this will not be reported. Reduce this value if you are interested in smaller variants
+  (50 bp is the common threshold for structural variants).
+
+- ``Maximum variant size``: Maximum variant size to report. Defaults to 10,000 bp. Increasing
+  this may reveal larger variants, but can also introduce spurious calls caused by alignment
+  artifacts, especially with fragmented assemblies or repetitive genomes.
+
+**Output files**
+
+- ``output.Assemblytics_assembly_stats.txt``: Statistics on your input assemblies.
+
+- ``output.Assemblytics_structural_variants.summary``: Text summary of structural variations (also available as a CSV).
+
+- ``output.Assemblytics_structural_variants.bed``: BED file of structural variations.
+
+- ``output.variants_between_alignments.bed``: BED file of variants found between alignments.
+
+- ``output.variants_within_alignments.bed``: BED file of variants found within alignments.
+
+- ``output.Assemblytics.unique_length_filtered.delta.gz``: Delta file of unique alignments after applying the unique-length filter.
+
+- ``output.info.csv``: Summary information on all alignments.
+
+- ``output.coords.csv``: All alignments as a CSV (also available as a tabular file).
+
+- ``output.coords.query.genome``: Length of each query contig with at least one alignment.
+
+- ``output.coords.ref.genome``: Length of each reference contig with at least one alignment.
+
+- ``output.oriented_coords.csv``: All alignments with coordinates oriented to the reference genome.
+
+**Visualizations**
+
+- ``output.Assemblytics.Dotplot_filtered.png``: Dotplot of the filtered alignments used for variant calling.
+
+- ``output.Assemblytics.Nchart.png``: N-chart of the input assemblies (also available as PDF).
+
+- ``output.Assemblytics.size_distributions.all_variants.50-500.png``: Size distribution of variants between 50 and 500 bp (also available as PDF).
+
+- ``output.Assemblytics.size_distributions.all_variants.500-10000.png``: Size distribution of variants between 500 and 10,000 bp (also available as PDF).
+
+- ``output.Assemblytics.size_distributions.all_variants.log_all_sizes.png``: Size distribution of all variants on a log scale (also available as PDF).
+
+    ]]></help>
+
+    <citations>
+        <citation type="doi">10.1093/bioinformatics/btw369</citation>
+    </citations>
+</tool>

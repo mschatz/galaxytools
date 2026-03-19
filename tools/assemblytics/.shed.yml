@@ -1,0 +1,8 @@
+categories: [Sequence Analysis]
+description: Analyze your assembly by comparing it to a reference genome
+long_description: |
+  Assemblytics detects and analyzes variants from a de novo genome assembly aligned to a reference genome. It incorporates a unique anchor filtering approach to increase robustness to repetitive elements and identifies six classes of variants based on their distinct alignment signatures. Assemblytics can be applied both to comparing aberrant genomes, such as human cancers, to a reference, or to identify differences between related species. Read more: https://pmc.ncbi.nlm.nih.gov/articles/PMC6191160/
+homepage_url: https://github.com/MariaNattestad/assemblytics
+name: assemblytics
+owner: mschatz
+remote_repository_url: https://github.com/mschatz/galaxy-tools/tree/main/tools/assemblytics
